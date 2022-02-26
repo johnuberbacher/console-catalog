@@ -28,9 +28,81 @@
         "
       >
         <div>
+          <div
+            id="carouselExampleCaptions"
+            class="carousel slide relative"
+            data-bs-ride="carousel"
+          >
+            <div class="carousel-inner relative w-full overflow-hidden">
+              <div
+                v-for="(screenshot, index) in this.gameScreenshots"
+                v-bind:key="index"
+                class="carousel-item relative float-left w-full "
+                v-bind:class="{ active: index == 1  }"
+              >
+                <img
+                  v-bind:src="screenshot.image"
+                  class="block w-full"
+                  alt="..."
+                />
+              </div>
+            </div>
+            <button
+              class="
+                carousel-control-prev
+                absolute
+                top-0
+                bottom-0
+                flex
+                items-center
+                justify-center
+                p-0
+                text-center
+                border-0
+                hover:outline-none hover:no-underline
+                focus:outline-none focus:no-underline
+                left-0
+              "
+              type="button"
+              data-bs-target="#carouselExampleCaptions"
+              data-bs-slide="prev"
+            >
+              <span
+                class="carousel-control-prev-icon inline-block bg-no-repeat"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button
+              class="
+                carousel-control-next
+                absolute
+                top-0
+                bottom-0
+                flex
+                items-center
+                justify-center
+                p-0
+                text-center
+                border-0
+                hover:outline-none hover:no-underline
+                focus:outline-none focus:no-underline
+                right-0
+              "
+              type="button"
+              data-bs-target="#carouselExampleCaptions"
+              data-bs-slide="next"
+            >
+              <span
+                class="carousel-control-next-icon inline-block bg-no-repeat"
+                aria-hidden="true"
+              ></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
           <img
             v-bind:src="gameDetails['background_image']"
-            class="rounded-2xl w-full"
+            class="hidden rounded-2xl w-full"
           />
         </div>
       </div>
@@ -67,31 +139,23 @@ export default {
   name: "Game",
   data() {
     return {
-      gameDetails: {
-        name: "",
-        description: "",
-      },
+      gameDetails: [],
+      gameScreenshots: [],
+      gamePlatforms: [],
     };
   },
   props: [],
   components: {},
   methods: {
-    loadData() {
-      // Load Game Details
-      axios
-        .get("https://api.rawg.io/api/games/137?key=" + process.env.VUE_APP_KEY, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + process.env.VUE_APP_KEY,
-          },
-        })
-        .then((response) => {
-          this.gameDetails = response.data;
-          console.log(this.gameDetails);
-        })
-        .catch((error) => {
-          console.log("error", error.response);
-        });
+    async loadData() {
+      const response1 = await axios.get(
+        "https://api.rawg.io/api/games/137?key=" + process.env.VUE_APP_KEY
+      );
+      this.gameDetails = response1.data;
+      const response2 = await axios.get(
+        "https://api.rawg.io/api/games/137/screenshots?key=" + process.env.VUE_APP_KEY
+      );
+      this.gameScreenshots = response2.data['results'];
     },
   },
   mounted() {

@@ -1,6 +1,6 @@
 module.exports = {
   darkMode: 'class',
-  content: [],
+  content: ['./src/**/*.{html,js}', './node_modules/tw-elements/dist/js/**/*.js'],
   purge: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
   theme: {
     fontSize: {
@@ -22,5 +22,7 @@ module.exports = {
       padding: '1rem',
     },
   },
-  plugins: [],
+  plugins: [
+    require('tw-elements/dist/plugin')
+  ],
 }
