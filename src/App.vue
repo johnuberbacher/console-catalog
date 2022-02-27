@@ -5,13 +5,13 @@
       bg-gray-50
       dark:bg-gray-900 dark:text-white
       h-full
-      lg:max-h-screen lg:overflow-y-auto
+      md:min-h-screen 
     "
   >
     <div class="grid grid-flow-row md:grid-flow-col md:flex md:flex-row h-full">
       <SideNav />
-      <div class="main w-full px-4 lg:px-8">
-        <div class="floating fixed top-4 right-4 lg:right-12 pl-4 lg:pl-8">
+      <div class="main w-full px-0 xl:px-4">
+        <div class="floating fixed top-4 right-4 pl-4">
           <div
             class="
               flex flex-row
@@ -106,10 +106,8 @@
             </button>
           </div>
         </div>
-        <div class="mx-auto pt-20 lg:pt-28">
-          <KeepAlive>
-            <router-view />
-          </KeepAlive>
+        <div class="mx-auto pt-5 md:pt-28">
+          <router-view> </router-view>
         </div>
       </div>
     </div>
@@ -117,7 +115,7 @@
 </template>
 
 <script>
-import 'tw-elements';
+import "tw-elements";
 import SideNav from "./components/sidenav/SideNav.vue";
 export default {
   name: "App",
@@ -164,8 +162,13 @@ export default {
 <style lang="scss">
 html,
 body {
-  height: 100%;
+  padding: 0;
+  margin: 0;
+  @media(min-width:768px) {
+    min-height: 100%;
+  }
 }
+
 .main {
   @media (min-width: 768px) {
     margin-left: 135px;

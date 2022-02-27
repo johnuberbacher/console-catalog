@@ -1,8 +1,9 @@
 <template>
-  <router-link
-    :to="'/game'"
+  <div
+    v-on:click="loadData()"
     class="
       block
+      cursor-pointer
       rounded-2xl
       shadow-xs
       hover:shadow-lg
@@ -35,10 +36,14 @@
             game-card-subtitle
             font-bold
             text-sm text-gray-500
-            dark:text-gray-500
+            dark:text-gray-400
+            flex
+            flex-row
+            items-center
+            justify-start
           "
         >
-          {{ rating }}
+          <v-icon name="star" class="fill-current text-gray-400 mr-2 mb-1"></v-icon>{{ rating }}
         </div>
         <div
           class="
@@ -121,20 +126,54 @@
         </div>
       </div>
     </div>
-  </router-link>
+  </div>
 </template>
 
 <script>
+import axios from "axios";
+import Icon from "vue-awesome/components/Icon";
 export default {
   name: "GameCard",
-  props: [
-    "title",
-    "background_image",
-    "suggestions_count",
-    "released",
-    "rating",
-    "platforms",
-  ],
-  components: {},
+  props: {
+    id: Number,
+    slug: String,
+    title: String,
+    background_image: String,
+    suggestions_count: String,
+    released: String,
+    rating: Number,
+    platforms: Array,
+  },
+  components: {
+    "v-icon": Icon,
+  },
+  data: function () {
+    return {
+      gameDetails: [],
+      gameScreenshots: [],
+      gamePlatforms: [],
+    };
+  },
+  methods: {
+    async loadData() {
+      await axios
+        .get(
+          "https://api.rawg.io/api/games/" +
+            this.slug +
+            "?key=" +
+            process.env.VUE_APP_KEY
+        )
+        .then((response) => {
+          console.log(response.data);
+          this.gameDetails = response.data;
+          this.$router.push({
+            name: "Game",
+            params: {
+              slug: this.gameDetails.slug,
+            },
+          });
+        });
+    },
+  },
 };
 </script>

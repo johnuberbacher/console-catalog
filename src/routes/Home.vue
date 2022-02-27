@@ -1,11 +1,13 @@
 <template>
   <div
     class="
+      container
       w-full
       grid grid-cols-1
+      md:grid-cols-2
       lg:grid-cols-3
       xl:grid-cols-4
-      lg:gap-4
+      md:gap-4
       xl:gap-8
     "
   >
@@ -49,7 +51,8 @@
       <GameCard
         v-for="(game, index) in globalGameList"
         v-bind:key="index"
-        v-bind:id="index"
+        v-bind:id="game.id"
+        v-bind:slug="game.slug"
         v-bind:title="game.name"
         v-bind:released="game.released"
         v-bind:rating="game.rating"
@@ -83,7 +86,7 @@
       </div>
     </div>
     <!-- Col 4-->
-    <div>
+    <div class="hidden lg:block">
       <div
         class="
           game-category-card-type
@@ -119,18 +122,9 @@
           >🞃</span
         >
       </div>
-      <GameCard
-        v-for="(game, index) in randomList(globalGameList)"
-        v-bind:key="index"
-        v-bind:title="game.name"
-        v-bind:released="game.released"
-        v-bind:rating="game.rating"
-        v-bind:platforms="game.platforms"
-        v-bind:background_image="game.background_image"
-      />
     </div>
     <!-- Col 3-->
-    <div>
+    <div class="hidden xl:block">
       <div
         class="game-category-card-type font-bold text-lg py-4 md:py-5 overflow"
       >
@@ -156,6 +150,9 @@ import PlatformCard from "../components/cards/PlatformCard.vue";
 
 export default {
   name: "Home",
+  meta: {
+    keepAlive: true, // Need to be cached
+  },
   data() {
     return {
       themeMode: "dark",
@@ -178,7 +175,6 @@ export default {
   },
   methods: {
     loadData() {
-
       // Load Games
       axios
         .get("https://api.rawg.io/api/games?key=" + process.env.VUE_APP_KEY, {
@@ -196,12 +192,16 @@ export default {
 
       // Load Platforms
       axios
-        .get("https://api.rawg.io/api/platforms/lists/parents?key=" + process.env.VUE_APP_KEY, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + process.env.VUE_APP_KEY,
-          },
-        })
+        .get(
+          "https://api.rawg.io/api/platforms/lists/parents?key=" +
+            process.env.VUE_APP_KEY,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + process.env.VUE_APP_KEY,
+            },
+          }
+        )
         .then((response) => {
           const sortArray = response.data["results"];
           for (var i = 0; i < sortArray.length; i++) {

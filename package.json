@@ -13,6 +13,7 @@
     "tw-elements": "^1.0.0-alpha11",
     "vue": "^2.6.11",
     "vue-analytics": "^5.22.1",
+    "vue-awesome": "^4.5.0",
     "vue-router": "^3.5.3"
   },
   "devDependencies": {
